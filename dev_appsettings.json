@@ -1,0 +1,13 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "my-host",
+  "AppSettings": {
+    "ConnectionString": "dev_connect",
+    "DirectoryFilesIgnore": "test"
+  }
+}

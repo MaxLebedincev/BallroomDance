@@ -14,7 +14,6 @@ namespace BallroomDanceAPI.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.ApplyConfiguration(new TypeBallroomDanceConfiguration());
             modelBuilder.ApplyConfiguration(new RussiaTrainerBallroomDanceConfiguration());
             modelBuilder.ApplyConfiguration(new DanceGroupConfiguration());

@@ -1,4 +1,5 @@
 using BallroomDanceAPI.DAL;
+using BallroomDanceAPI.DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -18,12 +19,13 @@ namespace BallroomDanceAPI.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly AppSettings _conf;
         private readonly ApplicationDbContext _appDbContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public WeatherForecastController(IOptions<AppSettings> conf, ILogger<WeatherForecastController> logger, ApplicationDbContext appDbContext)
+        public WeatherForecastController(IOptions<AppSettings> conf, ILogger<WeatherForecastController> logger, IUnitOfWork unitOfWork)
         {
             _conf = conf.Value;
             _logger = logger;
-            _appDbContext = appDbContext;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]

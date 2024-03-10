@@ -1,5 +1,8 @@
 using BallroomDanceAPI;
 using BallroomDanceAPI.DAL;
+using BallroomDanceAPI.DAL.Interfaces;
+using BallroomDanceAPI.DAL.Repositories;
+using BallroomDanceAPI.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -22,6 +25,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
     options.UseSqlServer(builder.Configuration["AppSettings:ConnectionString"]);
 });
+
+builder.Services.AddScoped<IRepositoryFactory, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IBaseRepository<TypeBallroomDance>, TypeBallroomDanceRepository>();
 
 var app = builder.Build();
 

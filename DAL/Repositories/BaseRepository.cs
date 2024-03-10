@@ -6,9 +6,9 @@ namespace BallroomDanceAPI.DAL.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext _dbContext;
+        protected readonly ApplicationDbContext _dbContext;
         protected readonly DbSet<TEntity> _dbSet;
-        public BaseRepository(DbContext dbContext)
+        public BaseRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _dbSet = _dbContext.Set<TEntity>();

@@ -7,11 +7,11 @@ namespace BallroomDanceAPI.DAL
 {
     public class UnitOfWork : IRepositoryFactory, IUnitOfWork
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
         private bool _disposed = false;
         private Dictionary<Type, object>? _repositories;
 
-        public UnitOfWork(DbContext context) 
+        public UnitOfWork(ApplicationDbContext context) 
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -45,7 +45,6 @@ namespace BallroomDanceAPI.DAL
         {
             return _context.SaveChanges();
         }
-
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

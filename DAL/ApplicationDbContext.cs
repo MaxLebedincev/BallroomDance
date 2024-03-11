@@ -9,8 +9,8 @@ namespace BallroomDanceAPI.DAL
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +20,8 @@ namespace BallroomDanceAPI.DAL
             modelBuilder.ApplyConfiguration(new DanceGroupConfiguration());
             modelBuilder.ApplyConfiguration(new ServerFileConfiguration());
             modelBuilder.ApplyConfiguration(new MemberDanceGroupConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
         }
     }
 }

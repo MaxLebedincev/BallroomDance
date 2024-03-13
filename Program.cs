@@ -3,9 +3,13 @@ using BallroomDanceAPI.DAL;
 using BallroomDanceAPI.DAL.Interfaces;
 using BallroomDanceAPI.DAL.Repositories;
 using BallroomDanceAPI.Domain.Entity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
+using Microsoft.IdentityModel.Tokens;
+using BallroomDanceAPI.Service.Registeration;
+using BallroomDanceAPI.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,15 +26,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.LogTo(Console.WriteLine);
-
     options.UseSqlServer(builder.Configuration["AppSettings:ConnectionString"]);
 });
 
-builder.Services.AddScoped<IRepositoryFactory, UnitOfWork>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IBaseRepository<TypeBallroomDance>, TypeBallroomDanceRepository>();
+builder.Services.AddUnitOfWork();
+builder.Services.AddCustomRepository<TypeBallroomDance, TypeBallroomDanceRepository>();
+
+builder.Services.AddAuthentication(builder.Configuration);
+
+builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 var app = builder.Build();
+
+app.UseExceptionHandler(_ => { });
 
 app.Map("*", (IOptions<AppSettings> options) =>
 {
@@ -50,6 +58,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

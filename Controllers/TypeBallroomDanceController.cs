@@ -1,6 +1,7 @@
 using BallroomDanceAPI.DAL;
 using BallroomDanceAPI.DAL.Interfaces;
 using BallroomDanceAPI.Domain.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 

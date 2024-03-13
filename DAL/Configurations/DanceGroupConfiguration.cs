@@ -12,7 +12,7 @@ namespace BallroomDanceAPI.DAL.Configurations
 
             builder.HasKey(x => x.Id).HasName("DanceGroupPrimaryKey"); ;
             builder.Property(x => x.Name).HasMaxLength(250).IsRequired();
-            builder.Property(x => x.DateCreated).IsRequired();
+            builder.Property(x => x.Created).IsRequired().ValueGeneratedOnAdd();
 
             builder
                 .HasOne(dg => dg.RussiaTrainerBallroomDance)

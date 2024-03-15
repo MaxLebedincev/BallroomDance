@@ -3,11 +3,8 @@ using BallroomDanceAPI.DAL;
 using BallroomDanceAPI.DAL.Interfaces;
 using BallroomDanceAPI.DAL.Repositories;
 using BallroomDanceAPI.Domain.Entity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using BallroomDanceAPI.Service.Registeration;
 using BallroomDanceAPI.Service;
 
@@ -30,9 +27,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddUnitOfWork();
+
 builder.Services.AddCustomRepository<TypeBallroomDance, TypeBallroomDanceRepository>();
+builder.Services.AddCustomRepository<RussiaTrainerBallroomDance, RussiaTrainerBallroomDanceRepository>();
+builder.Services.AddCustomRepository<DanceGroup, DanceGroupRepository>();
+builder.Services.AddCustomRepository<ServerFile, ServerFileRepository>();
+builder.Services.AddCustomRepository<MemberDanceGroup, MemberDanceGroupRepository>();
+builder.Services.AddCustomRepository<UserRole, UserRoleRepository>();
+builder.Services.AddCustomRepository<User, UserRepository>();
 
 builder.Services.AddAuthentication(builder.Configuration);
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 
@@ -57,6 +65,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors(options => options
+    .WithOrigins(new[] { "http://localhost:3000", "http://localhost:8080" })
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+);
 
 app.UseAuthentication();
 app.UseAuthorization();

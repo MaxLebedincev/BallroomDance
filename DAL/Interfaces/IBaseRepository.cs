@@ -3,8 +3,9 @@
     public interface IBaseRepository<TEntity> where TEntity : class
     {
         IQueryable<TEntity> GetAll();
-        TEntity CreateAsync(TEntity entity);
+        TEntity Create(TEntity entity);
         void Update(TEntity entity);
-        void DeleteAsync(TEntity entity);
+        void Delete(TEntity entity);
+        ValueTask<TEntity?> FindAsync(params object?[]? keyValues);
     }
 }

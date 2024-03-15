@@ -1,4 +1,4 @@
-using BallroomDanceAPI.Controllers.TypeBallroomDanceInteraction;
+﻿using BallroomDanceAPI.Controllers.UserRoleInteraction;
 using BallroomDanceAPI.DAL.Interfaces;
 using BallroomDanceAPI.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +9,23 @@ namespace BallroomDanceAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]/")]
-    public class TypeBallroomDanceController : ControllerBase
+    public class UserRoleController : ControllerBase
     {
-        private readonly ILogger<TypeBallroomDanceController> _logger;
         private readonly AppSettings _conf;
         private readonly IUnitOfWork _unitOfWork;
 
-        public TypeBallroomDanceController(IOptions<AppSettings> conf, ILogger<TypeBallroomDanceController> logger, IUnitOfWork unitOfWork)
+        public UserRoleController(IOptions<AppSettings> conf, IUnitOfWork unitOfWork)
         {
             _conf = conf.Value;
-            _logger = logger;
             _unitOfWork = unitOfWork;
         }
 
         [HttpPost("api/[controller]/Create")]
-        public async Task<ActionResult> Create([FromBody] TypeBallroomDanceRequest request)
+        public async Task<ActionResult> Create([FromBody] UserRoleRequest request)
         {
-            var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
+            var rep = _unitOfWork.GetRepository<UserRole>();
 
-
-            var newEntity = new TypeBallroomDance()
+            var newEntity = new UserRole()
             {
                 Name = request.Name,
             };
@@ -41,9 +38,9 @@ namespace BallroomDanceAPI.Controllers
         }
 
         [HttpPost("api/[controller]/Get")]
-        public async Task<ActionResult<List<TypeBallroomDanceResponse>>> Get([FromBody] TypeBallroomDanceDTO request)
+        public async Task<ActionResult<List<UserRoleResponse>>> Get([FromBody] UserRoleDTO request)
         {
-            var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
+            var rep = _unitOfWork.GetRepository<UserRole>();
 
             var list = rep.GetAll();
 
@@ -59,10 +56,10 @@ namespace BallroomDanceAPI.Controllers
 
             var paginatedList = await list.ToListAsync();
 
-            var resopnse = new List<TypeBallroomDanceResponse>();
+            var resopnse = new List<UserRoleResponse>();
 
             foreach (var item in paginatedList)
-                resopnse.Add(new TypeBallroomDanceResponse()
+                resopnse.Add(new UserRoleResponse()
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -72,16 +69,16 @@ namespace BallroomDanceAPI.Controllers
         }
 
         [HttpGet("api/[controller]/Get/{id}")]
-        public async Task<ActionResult<TypeBallroomDanceResponse?>> GetById(int id)
+        public async Task<ActionResult<UserRoleResponse?>> GetById(int id)
         {
-            var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
+            var rep = _unitOfWork.GetRepository<UserRole>();
 
             var entity = await rep.GetAll().Where(r => r.Id == id).FirstAsync();
 
             if (entity is null)
-                NotFound();
+                return NotFound();
 
-            var response = new TypeBallroomDanceResponse()
+            var response = new UserRoleResponse()
             {
                 Id = entity.Id,
                 Name = entity.Name,
@@ -93,7 +90,7 @@ namespace BallroomDanceAPI.Controllers
         [HttpDelete("api/[controller]/Delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
+            var rep = _unitOfWork.GetRepository<UserRole>();
 
             var entity = await rep.GetAll().Where(r => r.Id == id).FirstAsync();
 
@@ -108,9 +105,9 @@ namespace BallroomDanceAPI.Controllers
         }
 
         [HttpPut("api/[controller]/Update/{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] TypeBallroomDanceRequest newEntity)
+        public async Task<ActionResult> Update(int id, [FromBody] UserRoleRequest newEntity)
         {
-            var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
+            var rep = _unitOfWork.GetRepository<UserRole>();
 
             var entity = await rep.GetAll().Where(r => r.Id == id).FirstAsync();
 

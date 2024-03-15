@@ -14,12 +14,12 @@ namespace BallroomDanceAPI.DAL.Repositories
             _dbSet = _dbContext.Set<TEntity>();
         }
 
-        public TEntity CreateAsync(TEntity entity)
+        public TEntity Create(TEntity entity)
         {
             return _dbSet.Add(entity).Entity;
         }
 
-        public void DeleteAsync(TEntity entity)
+        public void Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
         }
@@ -33,5 +33,7 @@ namespace BallroomDanceAPI.DAL.Repositories
         {
             _dbSet.Update(entity);
         }
+
+        public async virtual ValueTask<TEntity?> FindAsync(params object?[]? keyValues) => await _dbSet.FindAsync(keyValues);
     }
 }

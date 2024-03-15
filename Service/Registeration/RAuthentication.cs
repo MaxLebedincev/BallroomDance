@@ -31,7 +31,19 @@ namespace BallroomDanceAPI.Service.Registeration
                     // валидация ключа безопасности
                     ValidateIssuerSigningKey = true,
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["jwt"];
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
+
+            services.AddHttpContextAccessor();
 
             services.AddAuthorization();
         }

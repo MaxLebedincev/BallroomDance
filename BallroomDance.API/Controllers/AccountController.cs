@@ -120,7 +120,7 @@ namespace BallroomDance.API.Controllers
                 role = user?.UserRole?.Name
             };
 
-            return new JsonResult(new { Person = person, JWT = encodedJwt });
+            return new JsonResult(person);
         }
 
         [HttpPost("api/[controller]/logout")]
@@ -142,7 +142,7 @@ namespace BallroomDance.API.Controllers
 
             var repUser = _unitOfWork.GetRepository<User>();
             var repRole = _unitOfWork.GetRepository<UserRole>();
-
+            
             var userSup = await repUser.GetAll().Where(u => u.Login == login).FirstOrDefaultAsync();
 
             var pas = Security.GetHash($"{userSup.Created}{password}{userSup.Created}");

@@ -13,7 +13,7 @@ using System.Security.Claims;
 namespace BallroomDance.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly AppSettings _conf;
@@ -25,7 +25,7 @@ namespace BallroomDance.API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("api/[controller]/register")]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] UserRequest data)
         {
 
@@ -61,7 +61,7 @@ namespace BallroomDance.API.Controllers
             });
         }
 
-        [HttpPost("/api/[controller]/token")]
+        [HttpPost("Token")]
         public async Task<ActionResult> Token([FromBody] UserRequest data)
         {
             var identity = await GetIdentity(data.Login, data.Password);
@@ -123,7 +123,7 @@ namespace BallroomDance.API.Controllers
             return new JsonResult(person);
         }
 
-        [HttpPost("api/[controller]/logout")]
+        [HttpPost("Logout")]
         public JsonResult Logout()
         {
             Response.Cookies.Append("jwt", "", new CookieOptions()

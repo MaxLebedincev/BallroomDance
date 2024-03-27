@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 namespace BallroomDance.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     [Authorize(Roles = "admin")]
     public class UserController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace BallroomDance.API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("api/[controller]/Create")]
+        [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] UserRequest request)
         {
             var rep = _unitOfWork.GetRepository<User>();
@@ -44,8 +44,8 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPost("api/[controller]/Get")]
-        public async Task<ActionResult<List<UserResponse>>> Get([FromBody] UserDTO request)
+        [HttpPost("Get")]
+        public async Task<ActionResult<List<UserResponse>>> Get([FromBody] UserDTO? request)
         {
             var rep = _unitOfWork.GetRepository<User>();
 
@@ -53,21 +53,31 @@ namespace BallroomDance.API.Controllers
 
             list = list.OrderBy(e => e.Id);
 
-            if (!string.IsNullOrEmpty(request.Login))
-                list = list
-                    .Where(e => EF.Functions.Like(e.Login, $"%{request.Login}%"));
+            if(request is not null)
+            {
+                if (!string.IsNullOrEmpty(request.Login))
+                    list = list
+                        .Where(e => EF.Functions.Like(e.Login, $"%{request.Login}%"));
 
-            if (!string.IsNullOrEmpty(request.Email))
-                list = list
-                    .Where(e => EF.Functions.Like(e.Login, $"%{request.Email}%"));
+                if (!string.IsNullOrEmpty(request.Email))
+                    list = list
+                        .Where(e => EF.Functions.Like(e.Login, $"%{request.Email}%"));
 
-            if (request.IdUserRole is not null)
-                list = list
-                    .Where(e => e.IdUserRole == request.IdUserRole);
+                if (request.IdUserRole.HasValue)
+                    list = list
+                        .Where(e => e.IdUserRole == request.IdUserRole);
 
-            list = list
-                    .Skip(request.Offset)
-                    .Take(request.Number);
+                list = list
+                        .Skip(request.Offset)
+                        .Take(request.Number);
+            }
+            else
+            {
+
+                list = list
+                        .Skip(0)
+                        .Take(10);
+            }
 
             var paginatedList = await list.ToListAsync();
 
@@ -88,7 +98,7 @@ namespace BallroomDance.API.Controllers
             return resopnse;
         }
 
-        [HttpGet("api/[controller]/Get/{id}")]
+        [HttpGet("Get/{id:int}")]
         public async Task<ActionResult<UserResponse?>> GetById(int id)
         {
             var rep = _unitOfWork.GetRepository<User>();
@@ -112,7 +122,7 @@ namespace BallroomDance.API.Controllers
             return response;
         }
 
-        [HttpDelete("api/[controller]/Delete/{id}")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var rep = _unitOfWork.GetRepository<User>();
@@ -129,7 +139,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPut("api/[controller]/Update/{id}")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ActionResult> Update(int id, [FromBody] UserRequest newEntity)
         {
             var rep = _unitOfWork.GetRepository<User>();

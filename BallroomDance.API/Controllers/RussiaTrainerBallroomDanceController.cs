@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 namespace BallroomDance.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class RussiaTrainerBallroomDanceController : ControllerBase
     {
         private readonly AppSettings _conf;
@@ -21,7 +21,7 @@ namespace BallroomDance.API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("api/[controller]/Create")]
+        [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] RussiaTrainerBallroomDanceRequest request)
         {
             var rep = _unitOfWork.GetRepository<RussiaTrainerBallroomDance>();
@@ -42,7 +42,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPost("api/[controller]/Get")]
+        [HttpPost("Get")]
         public async Task<ActionResult<List<RussiaTrainerBallroomDanceResponse>>> Get([FromBody] RussiaTrainerBallroomDanceDTO request)
         {
             var rep = _unitOfWork.GetRepository<RussiaTrainerBallroomDance>();
@@ -83,7 +83,7 @@ namespace BallroomDance.API.Controllers
             return resopnse;
         }
 
-        [HttpGet("api/[controller]/Get/{id}")]
+        [HttpGet("Get/{id:int}")]
         public async Task<ActionResult<RussiaTrainerBallroomDanceResponse?>> GetById(int id)
         {
             var rep = _unitOfWork.GetRepository<RussiaTrainerBallroomDance>();
@@ -104,7 +104,7 @@ namespace BallroomDance.API.Controllers
             return response;
         }
 
-        [HttpDelete("api/[controller]/Delete/{id}")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var rep = _unitOfWork.GetRepository<RussiaTrainerBallroomDance>();
@@ -121,7 +121,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPut("api/[controller]/Update/{id}")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ActionResult> Update(int id, [FromBody] RussiaTrainerBallroomDanceRequest newEntity)
         {
             var rep = _unitOfWork.GetRepository<RussiaTrainerBallroomDance>();

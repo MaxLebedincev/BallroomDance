@@ -7,7 +7,7 @@ export async function UseAuthorization(login, password) {
     const fetching = async () => {
         try {
             const response = await axios.post(
-            '/token',
+            '/Account/Token',
             {
                     login: login,
                     password: password

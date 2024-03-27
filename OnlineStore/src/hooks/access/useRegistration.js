@@ -7,7 +7,7 @@ export async function UseRegistration(login, password, email, role) {
     const fetching = async () => {
         try {
             const response = await axios.post(
-                '/register',
+                '/Account/Register',
                 {
                     login: login,
                     password: password,

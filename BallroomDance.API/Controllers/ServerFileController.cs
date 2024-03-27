@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace BallroomDance.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class ServerFileController : ControllerBase
     {
         private readonly AppSettings _conf;
@@ -20,7 +20,7 @@ namespace BallroomDance.API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("api/[controller]/Create")]
+        [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] ServerFileRequest request)
         {
             var rep = _unitOfWork.GetRepository<ServerFile>();
@@ -39,7 +39,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPost("api/[controller]/Get")]
+        [HttpPost("Get")]
         public async Task<ActionResult<List<ServerFileResponse>>> Get([FromBody] ServerFileDTO request)
         {
             var rep = _unitOfWork.GetRepository<ServerFile>();
@@ -69,7 +69,7 @@ namespace BallroomDance.API.Controllers
             return resopnse;
         }
 
-        [HttpGet("api/[controller]/Get/{guid}")]
+        [HttpGet("Get/{guid:guid}")]
         public async Task<ActionResult<ServerFileResponse?>> GetById(Guid guid)
         {
             var rep = _unitOfWork.GetRepository<ServerFile>();
@@ -89,7 +89,7 @@ namespace BallroomDance.API.Controllers
             return response;
         }
 
-        [HttpDelete("api/[controller]/Delete/{guid}")]
+        [HttpDelete("Delete/{guid:guid}")]
         public async Task<ActionResult> Delete(Guid guid)
         {
             var rep = _unitOfWork.GetRepository<ServerFile>();
@@ -106,7 +106,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPut("api/[controller]/Update/{guid}")]
+        [HttpPut("Update/{guid:guid}")]
         public async Task<ActionResult> Update(Guid guid, [FromBody] ServerFileRequest newEntity)
         {
             var rep = _unitOfWork.GetRepository<ServerFile>();

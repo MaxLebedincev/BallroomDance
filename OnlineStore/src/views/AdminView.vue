@@ -55,7 +55,7 @@
                             <v-icon start>
                                 mdi-account
                             </v-icon>
-                            клиентов
+                            Пользователей
                         </v-tab>
                         <v-tab
                             value="option-5"
@@ -205,19 +205,22 @@
                                     <template #text>
                                         <v-text-field
                                             label="Имя"
+                                            v-model="newUser.Login"
                                             hide-details="auto"
                                         ></v-text-field>
                                         <v-text-field
                                             label="Пароль"
+                                            v-model="newUser.Password"
                                             hide-details="auto"
                                         ></v-text-field>
                                         <v-text-field
                                             label="Email"
+                                            v-model="newUser.Email"
                                             hide-details="auto"
                                         ></v-text-field>
                                     </template>
                                     <template #actions>
-                                        <v-btn width="170px" variant="outlined" class="card-button" @click="createAlert">
+                                        <v-btn width="170px" variant="outlined" class="card-button" @click="createUser">
                                             Добавить
                                         </v-btn>
                                     </template>
@@ -295,9 +298,9 @@
                                             >
                                                 <td width="20%">{{ item.login }}</td>
                                                 <td width="20%">{{ item.email }}</td>
-                                                <td width="20%">{{ selectRole(item.role) }}</td>
-                                                <td width="10%">{{ dateConvert(item.registerDate) }}</td>
-                                                <td width="10%">{{ dateConvert(item.updateDate) }}</td>
+                                                <td width="20%">{{ selectRole(item.idUserRole) }}</td>
+                                                <td width="10%">{{ dateConvert(item.created) }}</td>
+                                                <td width="10%">{{ dateConvert(item.updated)}}</td>
                                                 <td width="20%" class="text-right">
                                                     <v-btn width="170px" variant="text" @click="createAlert">
                                                         Редактировать
@@ -384,13 +387,26 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
+    <v-dialog
+        :model-value="alertSuccess"
+        width="auto"
+    >
+        <v-card>
+            <v-card-text>
+                Функциоал находится в разработке!
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="#dd0000" block @click="alert = false">Закрыть</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
 import moment from 'moment';
 import {UseSelectBooks} from "@/hooks/data/get/useSelectBooks";
 import {UseSelectGenres} from "@/hooks/data/get/useSelectGenres";
-import {UseSelectUser} from "@/hooks/data/get/useSelectUser";
+import {UserCreate, UserGet} from "@/hooks/endpoint/user";
 
 export default {
     name: "AdminView",
@@ -401,7 +417,14 @@ export default {
         genres: [],
         users: [],
         role: localStorage.getItem('role') ?? '',
-        alert: false
+        alert: false,
+        alertSuccess: false,
+        newUser: {
+            IdUserRole: 1,
+            Login: null,
+            Email: null,
+            Password: null
+        }
     }),
     mounted() {
         this.tabOpt = 'option-2'
@@ -420,26 +443,42 @@ export default {
             }
         },
         async getUsers() {
-            let {data, answer} = await UseSelectUser();
+            let {data, answer} = await UserGet();
             if (answer.value) {
                 this.users = data.value;
             }
         },
+        async createUser() {
+            let result = await UserCreate(this.newUser.Login, this.newUser.Password, this.newUser.Email, this.newUser.IdUserRole);
+            if (result) {
+                this.newUser = {
+                    IdUserRole: 1,
+                    Login: null,
+                    Email: null,
+                    Password: null
+                };
+                this.createAlertSuccess();
+            }
+            else {
+                this.createAlert();
+            }
+        },
         dateConvert(date) {
-            return moment(date).format("YYYY-MM-DD")
+            return (date) ? moment(date).format("YYYY-MM-DD") : '-';
         },
         selectRole(role) {
             switch (role) {
-                case 'admin':
+                case 1:
                     return 'Админ'
-                case 'client':
+                case 2:
                     return 'Клиент'
-                case 'moderator':
-                    return 'Модератор'
             }
         },
         createAlert(){
             this.alert = true;
+        },
+        createAlertSuccess(){
+            this.alertSuccess = true;
         }
     }
 }
@@ -477,6 +516,7 @@ export default {
     .card-table {
         height: 70vh !important;
         overflow-y: auto;
+        padding: 0px;
     }
 }
 </style>

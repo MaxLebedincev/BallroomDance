@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace BallroomDance.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class TypeBallroomDanceController : ControllerBase
     {
         private readonly ILogger<TypeBallroomDanceController> _logger;
@@ -22,7 +22,7 @@ namespace BallroomDance.API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("api/[controller]/Create")]
+        [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] TypeBallroomDanceRequest request)
         {
             var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
@@ -40,7 +40,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPost("api/[controller]/Get")]
+        [HttpPost("Get")]
         public async Task<ActionResult<List<TypeBallroomDanceResponse>>> Get([FromBody] TypeBallroomDanceDTO request)
         {
             var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
@@ -71,7 +71,7 @@ namespace BallroomDance.API.Controllers
             return resopnse;
         }
 
-        [HttpGet("api/[controller]/Get/{id}")]
+        [HttpGet("Get/{id:int}")]
         public async Task<ActionResult<TypeBallroomDanceResponse?>> GetById(int id)
         {
             var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
@@ -90,7 +90,7 @@ namespace BallroomDance.API.Controllers
             return response;
         }
 
-        [HttpDelete("api/[controller]/Delete/{id}")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
@@ -107,7 +107,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPut("api/[controller]/Update/{id}")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ActionResult> Update(int id, [FromBody] TypeBallroomDanceRequest newEntity)
         {
             var rep = _unitOfWork.GetRepository<TypeBallroomDance>();

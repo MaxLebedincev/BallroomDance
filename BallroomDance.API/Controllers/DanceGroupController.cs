@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace BallroomDance.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class DanceGroupController : ControllerBase
     {
         private readonly AppSettings _conf;
@@ -20,7 +20,7 @@ namespace BallroomDance.API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("api/[controller]/Create")]
+        [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] DanceGroupRequest request)
         {
             var rep = _unitOfWork.GetRepository<DanceGroup>();
@@ -39,7 +39,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPost("api/[controller]/Get")]
+        [HttpPost("Get")]
         public async Task<ActionResult<List<DanceGroupResponse>>> Get([FromBody] DanceGroupDTO request)
         {
             var rep = _unitOfWork.GetRepository<DanceGroup>();
@@ -77,7 +77,7 @@ namespace BallroomDance.API.Controllers
             return resopnse;
         }
 
-        [HttpGet("api/[controller]/Get/{id}")]
+        [HttpGet("Get/{id:int}")]
         public async Task<ActionResult<DanceGroupResponse?>> GetById(int id)
         {
             var rep = _unitOfWork.GetRepository<DanceGroup>();
@@ -98,7 +98,7 @@ namespace BallroomDance.API.Controllers
             return response;
         }
 
-        [HttpDelete("api/[controller]/Delete/{id}")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var rep = _unitOfWork.GetRepository<DanceGroup>();
@@ -115,7 +115,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPut("api/[controller]/Update/{id}")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ActionResult> Update(int id, [FromBody] DanceGroupRequest newEntity)
         {
             var rep = _unitOfWork.GetRepository<DanceGroup>();

@@ -7,7 +7,7 @@ export async function UseLogout() {
     const fetching = async () => {
         try {
             const response = await axios.post(
-                '/logout',
+                '/Account/Logout',
                 {});
             message.value = response.data;
             answer.value = true;

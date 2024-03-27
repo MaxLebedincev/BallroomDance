@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace BallroomDance.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class MemberDanceGroupController : ControllerBase
     {
         private readonly AppSettings _conf;
@@ -20,7 +20,7 @@ namespace BallroomDance.API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("api/[controller]/Create")]
+        [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] MemberDanceGroupRequest request)
         {
             var rep = _unitOfWork.GetRepository<MemberDanceGroup>();
@@ -44,7 +44,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPost("api/[controller]/Get")]
+        [HttpPost("Get")]
         public async Task<ActionResult<List<MemberDanceGroupResponse>>> Get([FromBody] MemberDanceGroupDTO request)
         {
             var rep = _unitOfWork.GetRepository<MemberDanceGroup>();
@@ -100,7 +100,7 @@ namespace BallroomDance.API.Controllers
             return resopnse;
         }
 
-        [HttpGet("api/[controller]/Get/{id}")]
+        [HttpGet("Get/{id:int}")]
         public async Task<ActionResult<MemberDanceGroupResponse?>> GetById(int id)
         {
             var rep = _unitOfWork.GetRepository<MemberDanceGroup>();
@@ -126,7 +126,7 @@ namespace BallroomDance.API.Controllers
             return response;
         }
 
-        [HttpDelete("api/[controller]/Delete/{id}")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var rep = _unitOfWork.GetRepository<MemberDanceGroup>();
@@ -143,7 +143,7 @@ namespace BallroomDance.API.Controllers
             return Ok();
         }
 
-        [HttpPut("api/[controller]/Update/{id}")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ActionResult> Update(int id, [FromBody] MemberDanceGroupRequest newEntity)
         {
             var rep = _unitOfWork.GetRepository<MemberDanceGroup>();

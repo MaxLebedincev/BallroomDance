@@ -19,7 +19,7 @@
                                 mdi-account-plus
                             </v-icon>
                             <div class="tab-title">
-                                клиента
+                                пользователя
                             </div>
                         </v-tab>
                         <v-tab
@@ -28,13 +28,13 @@
                             <v-icon start>
                                 mdi-book-plus
                             </v-icon>
-                            книг
+                            группы
                         </v-tab>
                         <v-tab value="option-3">
                             <v-icon start>
                                 mdi-bookmark-plus
                             </v-icon>
-                            жанра
+                            типа танцев
                         </v-tab>
                     </v-tabs>
                 </v-card>
@@ -59,12 +59,12 @@
                         </v-tab>
                         <v-tab
                             value="option-5"
-                            @click="getBooks()"
+                            @click="getDanceGroups()"
                         >
                             <v-icon start>
                                 mdi-book
                             </v-icon>
-                            книг
+                            групп
                         </v-tab>
                         <v-tab
                             value="option-6"
@@ -73,7 +73,7 @@
                             <v-icon start>
                                 mdi-bookmark
                             </v-icon>
-                            жанров
+                            танцев
                         </v-tab>
                     </v-tabs>
                 </v-card>
@@ -92,14 +92,14 @@
                             <v-window-item value="option-2">
                                 <v-card elevation="4">
                                     <template #title>
-                                        Добавление книги
+                                        Добавление групп
                                     </template>
                                 </v-card>
                             </v-window-item>
                             <v-window-item value="option-3">
                                 <v-card elevation="4">
                                     <template #title>
-                                        Добавление жанра
+                                        Добавление танцев
                                     </template>
                                 </v-card>
                             </v-window-item>
@@ -140,26 +140,17 @@
                             <v-window-item value="option-5">
                                 <v-card elevation="4" class="card-table">
                                     <template #title>
-                                        Таблица книг
+                                        Таблица групп
                                     </template>
                                     <template #text>
                                         <v-table>
                                             <thead>
                                             <tr style="padding: 0 1rem; display: table; text-align: center">
-                                                <td width="25%">
-                                                    Имя
+                                                <td width="60%">
+                                                    Название
                                                 </td>
-                                                <td width="15%">
-                                                    Цена
-                                                </td>
-                                                <td width="25%">
-                                                    Автор
-                                                </td>
-                                                <td width="10%">
-                                                    Дата добавления
-                                                </td>
-                                                <td width="5%">
-                                                    Оценка
+                                                <td width="20%">
+                                                    Дата создания
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -174,17 +165,14 @@
                             <v-window-item value="option-6">
                                 <v-card elevation="4" class="card-table">
                                     <template #title>
-                                        Таблица жанров
+                                        Таблица танцев
                                     </template>
                                     <template #text>
                                         <v-table style="text-align: center">
                                             <thead>
                                             <tr>
-                                                <td width="40%">
-                                                    Имя
-                                                </td>
-                                                <td width="40%">
-                                                    Картинка
+                                                <td width="80%">
+                                                    Название
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -211,12 +199,14 @@
                                         <v-text-field
                                             label="Пароль"
                                             v-model="newUser.Password"
+                                            type="password"
                                             hide-details="auto"
                                         ></v-text-field>
                                         <v-text-field
                                             label="Email"
                                             v-model="newUser.Email"
                                             hide-details="auto"
+                                            type="email"
                                         ></v-text-field>
                                     </template>
                                     <template #actions>
@@ -231,34 +221,17 @@
                                     <template #text>
                                         <v-text-field
                                             label="Наименование"
+                                            v-model="newGroup.Name"
                                             hide-details="auto"
                                         ></v-text-field>
-                                        <v-text-field
-                                            label="Цена"
+                                        <v-date-picker
+                                            label="Дата создания"
+                                            v-model="newGroup.Created"
                                             hide-details="auto"
-                                        ></v-text-field>
-                                        <v-select
-                                            :modelValue="favorites"
-                                            :items="states"
-                                            label="Жанры"
-                                            multiple
-                                            persistent-hint
-                                            hide-details="auto"
-                                        ></v-select>
-                                        <v-text-field
-                                            label="Автор"
-                                            hide-details="auto"
-                                        ></v-text-field>
-                                        <v-textarea
-                                            label="Описание"
-                                            hide-details="auto"
-                                        ></v-textarea>
-                                        <v-file-input
-                                            label="Изображение"
-                                        ></v-file-input>
+                                        ></v-date-picker>
                                     </template>
                                     <template #actions>
-                                        <v-btn width="170px" variant="outlined" class="card-button" @click="createAlert">
+                                        <v-btn width="170px" variant="outlined" class="card-button" @click="createDanceGroup">
                                             Добавить
                                         </v-btn>
                                     </template>
@@ -302,10 +275,44 @@
                                                 <td width="10%">{{ dateConvert(item.created) }}</td>
                                                 <td width="10%">{{ dateConvert(item.updated)}}</td>
                                                 <td width="20%" class="text-right">
-                                                    <v-btn width="170px" variant="text" @click="createAlert">
+                                                    <v-btn width="170px" variant="text" @click="usetEditModal=true">
                                                         Редактировать
                                                     </v-btn>
-                                                    <v-btn width="170px" variant="text" @click="createAlert">
+                                                    <v-dialog
+                                                        :model-value="usetEditModal"
+                                                        width="auto"
+                                                    >
+                                                        <v-card>
+                                                            <template #text>
+                                                                <v-text-field
+                                                                    label="Имя"
+                                                                    v-model="item.login"
+                                                                    hide-details="auto"
+                                                                ></v-text-field>
+                                                                <v-text-field
+                                                                    label="Пароль"
+                                                                    v-model="item.password"
+                                                                    type="password"
+                                                                    hide-details="auto"
+                                                                ></v-text-field>
+                                                                <v-text-field
+                                                                    label="Email"
+                                                                    v-model="item.email"
+                                                                    hide-details="auto"
+                                                                    type="email"
+                                                                ></v-text-field>
+                                                            </template>
+                                                            <template #actions>
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="editUser(item)">
+                                                                    Обновить
+                                                                </v-btn>
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="usetEditModal = false">
+                                                                    Закрыть
+                                                                </v-btn>
+                                                            </template>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-btn width="170px" variant="text" @click="deleteUser(item.id)">
                                                         Удалить
                                                     </v-btn>
                                                 </td>
@@ -321,19 +328,43 @@
                                         <v-table style="text-align: center">
                                             <tbody>
                                             <tr
-                                                v-for="item in books"
+                                                v-for="item in groups"
                                                 :key="item.id"
                                             >
-                                                <td width="25%">{{ item.name }}</td>
-                                                <td width="15%">{{ item.price }}</td>
-                                                <td width="25%">{{ item.author }}</td>
-                                                <td width="10%">{{ dateConvert(item.date) }}</td>
-                                                <td width="5%">{{ item.popular }}</td>
+                                                <td width="60%">{{ item.name }}</td>
+                                                <td width="20%">{{ dateConvert(item.created) }}</td>
                                                 <td width="20%" class="text-right">
-                                                    <v-btn width="170px" variant="text" @click="createAlert">
+                                                    <v-btn width="170px" variant="text" @click="danceGroupEditModal = true">
                                                         Редактировать
                                                     </v-btn>
-                                                    <v-btn width="170px" variant="text" @click="createAlert">
+                                                    <v-dialog
+                                                        :model-value="danceGroupEditModal"
+                                                        width="auto"
+                                                    >
+                                                        <v-card>
+                                                            <template #text>
+                                                                <v-text-field
+                                                                    label="Имя"
+                                                                    v-model="item.Name"
+                                                                    hide-details="auto"
+                                                                ></v-text-field>
+                                                                <v-date-picker
+                                                                    label="Дата создания"
+                                                                    v-model="item.Created"
+                                                                    hide-details="auto"
+                                                                ></v-date-picker>
+                                                            </template>
+                                                            <template #actions>
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="editDanceGroup(item)">
+                                                                    Обновить
+                                                                </v-btn>
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="danceGroupEditModal = false">
+                                                                    Закрыть
+                                                                </v-btn>
+                                                            </template>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-btn width="170px" variant="text" @click="deleteDanceGroup">
                                                         Удалить
                                                     </v-btn>
                                                 </td>
@@ -393,10 +424,49 @@
     >
         <v-card>
             <v-card-text>
-                Функциоал находится в разработке!
+                Запись добавлена!
             </v-card-text>
             <v-card-actions>
-                <v-btn color="#dd0000" block @click="alert = false">Закрыть</v-btn>
+                <v-btn color="#dd0000" block @click="alertSuccess = false">Закрыть</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-dialog
+        :model-value="alertFailed"
+        width="auto"
+    >
+        <v-card>
+            <v-card-text>
+                Произошла ошибка!
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="#dd0000" block @click="alertFailed = false">Закрыть</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-dialog
+        :model-value="alertDelete"
+        width="auto"
+    >
+        <v-card>
+            <v-card-text>
+                Запись удалена!
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="#dd0000" block @click="alertDelete = false">Закрыть</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-dialog
+        :model-value="alertUpdate"
+        width="auto"
+    >
+        <v-card>
+            <v-card-text>
+                Запись изменена!
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="#dd0000" block @click="alertUpdate = false">Закрыть</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -406,7 +476,8 @@
 import moment from 'moment';
 import {UseSelectBooks} from "@/hooks/data/get/useSelectBooks";
 import {UseSelectGenres} from "@/hooks/data/get/useSelectGenres";
-import {UserCreate, UserGet} from "@/hooks/endpoint/user";
+import {UserCreate, UserDelete, UserEdit, UserGet} from "@/hooks/endpoint/user";
+import {DanceGroupCreate, DanceGroupDelete, DanceGroupEdit, DanceGroupGet} from "@/hooks/endpoint/danceGroup";
 
 export default {
     name: "AdminView",
@@ -414,16 +485,29 @@ export default {
         tabOpt: 'option-2',
         favorites: [],
         books: [],
-        genres: [],
         users: [],
+        groups: [],
+
         role: localStorage.getItem('role') ?? '',
         alert: false,
         alertSuccess: false,
+        alertFailed: false,
+        alertDelete: false,
+        alertUpdate: false,
+
+        usetEditModal: false,
+        danceGroupEditModal: false,
+
         newUser: {
             IdUserRole: 1,
             Login: null,
             Email: null,
             Password: null
+        },
+        newGroup: {
+            RussiaTrainerBallroomDanceId: 1,
+            Name: null,
+            Created: null
         }
     }),
     mounted() {
@@ -442,6 +526,7 @@ export default {
                 this.genres = data.value;
             }
         },
+
         async getUsers() {
             let {data, answer} = await UserGet();
             if (answer.value) {
@@ -460,9 +545,71 @@ export default {
                 this.createAlertSuccess();
             }
             else {
-                this.createAlert();
+                this.createAlertFailed();
             }
         },
+        async deleteUser(id) {
+            let result = await UserDelete(id);
+            if (result) {
+                await this.getUsers();
+                this.createAlertDelete();
+            }
+            else {
+                this.createAlertFailed();
+            }
+        },
+        async editUser(item) {
+            let result = await UserEdit(item);
+            if (result) {
+                await this.getUsers();
+                this.createAlertUpdate();
+            }
+            else {
+                this.createAlertFailed();
+            }
+        },
+
+        async getDanceGroups() {
+            let {data, answer} = await DanceGroupGet();
+            if (answer.value) {
+                this.groups = data.value;
+            }
+        },
+        async createDanceGroup() {
+            let result = await DanceGroupCreate(this.newGroup.Name, this.newGroup.Created);
+            if (result) {
+                this.newGroup = {
+                    Name: null,
+                    Created: null
+                };
+                this.createAlertSuccess();
+            }
+            else {
+                this.createAlertFailed();
+            }
+        },
+        async deleteDanceGroup(id) {
+            let result = await DanceGroupDelete(id);
+            if (result) {
+                await this.getDanceGroups();
+                this.createAlertDelete();
+            }
+            else {
+                this.createAlertFailed();
+            }
+        },
+        async editDanceGroup(item) {
+            let result = await DanceGroupEdit(item);
+            if (result) {
+                await this.getUsers();
+                this.createAlertUpdate();
+            }
+            else {
+                this.createAlertFailed();
+            }
+        },
+
+
         dateConvert(date) {
             return (date) ? moment(date).format("YYYY-MM-DD") : '-';
         },
@@ -479,6 +626,15 @@ export default {
         },
         createAlertSuccess(){
             this.alertSuccess = true;
+        },
+        createAlertFailed(){
+            this.alertFailed = true;
+        },
+        createAlertDelete(){
+            this.alertDelete = true;
+        },
+        createAlertUpdate(){
+            this.alertUpdate = true;
         }
     }
 }

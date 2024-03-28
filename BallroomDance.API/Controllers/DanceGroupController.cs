@@ -40,7 +40,7 @@ namespace BallroomDance.API.Controllers
         }
 
         [HttpPost("Get")]
-        public async Task<ActionResult<List<DanceGroupResponse>>> Get([FromBody] DanceGroupDTO request)
+        public async Task<ActionResult<List<DanceGroupResponse>>> Get([FromBody] DanceGroupDTO? request)
         {
             var rep = _unitOfWork.GetRepository<DanceGroup>();
 
@@ -48,18 +48,27 @@ namespace BallroomDance.API.Controllers
 
             list = list.OrderBy(e => e.Id);
 
-            if (!string.IsNullOrEmpty(request.Name))
-                list = list.Where(e => EF.Functions.Like(e.Name, $"%{request.Name}%"));
+            if (request is not null)
+            {
+                if (!string.IsNullOrEmpty(request.Name))
+                    list = list.Where(e => EF.Functions.Like(e.Name, $"%{request.Name}%"));
 
-            if (!string.IsNullOrEmpty(request.Created))
-                list = list.Where(e => e.Created >= DateTime.Parse(request.Created));
+                if (!string.IsNullOrEmpty(request.Created))
+                    list = list.Where(e => e.Created >= DateTime.Parse(request.Created));
 
-            if (!string.IsNullOrEmpty(request.Finish))
-                list = list.Where(e => e.Created <= DateTime.Parse(request.Finish));
+                if (!string.IsNullOrEmpty(request.Finish))
+                    list = list.Where(e => e.Created <= DateTime.Parse(request.Finish));
 
-            list = list
-                    .Skip(request.Offset)
-                    .Take(request.Number);
+                list = list
+                        .Skip(request.Offset)
+                        .Take(request.Number);
+            }
+            else
+            {
+                list = list
+                        .Skip(0)
+                        .Take(10);
+            }
 
             var paginatedList = await list.ToListAsync();
 

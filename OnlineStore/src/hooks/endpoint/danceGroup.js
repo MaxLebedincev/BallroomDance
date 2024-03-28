@@ -1,9 +1,9 @@
 import axios from "axios";
 import {ref} from 'vue';
 
-const endpoint = '/User';
+const endpoint = '/DanceGroup';
 
-export async function UserGet() {
+export async function DanceGroupGet() {
     const data = ref([])
     const answer = ref(false)
     const fetching = async () => {
@@ -21,16 +21,15 @@ export async function UserGet() {
     }
 }
 
-export async function UserCreate(login, password, email, role) {
+export async function DanceGroupCreate(name, created) {
     const message = ref([])
     const answer = ref(false)
     const fetching = async () => {
         try {
             const response = await axios.post(`${endpoint}/Create`, {
-                login: login,
-                password: password,
-                email: email,
-                idUserRole: role
+                RussiaTrainerBallroomDanceId: 1,
+                Name: name,
+                Created: created
             }, {Authorization: `Bearer ${document.cookie.split('=')[1]}`});
             message.value = response.data.error ?? response.data.success;
             answer.value = true;
@@ -44,7 +43,7 @@ export async function UserCreate(login, password, email, role) {
     }
 }
 
-export async function UserDelete(id) {
+export async function DanceGroupDelete(id) {
     const message = ref([])
     const answer = ref(false)
     const fetching = async () => {
@@ -63,16 +62,16 @@ export async function UserDelete(id) {
     }
 }
 
-export async function UserEdit(item) {
+export async function DanceGroupEdit(item) {
     const message = ref([])
     const answer = ref(false)
     const fetching = async () => {
         try {
             const response = await axios.put(`${endpoint}/Update/${item.id}`,
                 {
-                    IdUserRole: 1,
-                    Login: item.login,
-                    Email: item.email,
+                    RussiaTrainerBallroomDanceId: 1,
+                    Name: item.Name,
+                    Created: item.Created,
                 },
                 {Authorization: `Bearer ${document.cookie.split('=')[1]}`});
             message.value = response.data.error ?? response.data.success;

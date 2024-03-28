@@ -13,13 +13,13 @@ namespace BallroomDance.API.DAL
             //Database.EnsureCreated();
         }
 
-        public DbSet<TypeBallroomDance> TypeBallroomDance { get; set; }
-        public DbSet<RussiaTrainerBallroomDance> RussiaTrainerBallroomDance { get; set; }
-        public DbSet<DanceGroup> DanceGroup { get; set; }
-        public DbSet<ServerFile> ServerFile { get; set; }
-        public DbSet<MemberDanceGroup> MemberDanceGroup { get; set; }
-        public DbSet<UserRole> UserRole { get; set; }
-        public DbSet<User> User { get; set; }
+        //public DbSet<TypeBallroomDance> TypeBallroomDance { get; set; }
+        //public DbSet<RussiaTrainerBallroomDance> RussiaTrainerBallroomDance { get; set; }
+        //public DbSet<DanceGroup> DanceGroup { get; set; }
+        //public DbSet<ServerFile> ServerFile { get; set; }
+        //public DbSet<MemberDanceGroup> MemberDanceGroup { get; set; }
+        //public DbSet<UserRole> UserRole { get; set; }
+        //public DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,7 @@
 ﻿using BallroomDance.API.Controllers.UserInteraction;
 using BallroomDance.API.DAL.Interfaces;
 using BallroomDance.API.Domain.Entity;
+using BallroomDance.API.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,14 +28,16 @@ namespace BallroomDance.API.Controllers
         {
             var rep = _unitOfWork.GetRepository<User>();
 
+            var date = DateTime.Now;
+
             var newEntity = new User()
             {
                 IdUserRole = request.IdUserRole,
                 Login = request.Login,
                 Email = request.Email,
-                Password = request.Password,
-                Created = request.Created,
-                Updated = request.Updated
+                Password = Security.GetHash($"{date}{request.Password}{date}"),
+                Created = date,
+                Updated = date
             };
 
             rep.Create(newEntity);
@@ -90,7 +93,6 @@ namespace BallroomDance.API.Controllers
                     IdUserRole = item.IdUserRole,
                     Login = item.Login,
                     Email = item.Email,
-                    Password = item.Password,
                     Created = item.Created,
                     Updated = item.Updated
                 });
@@ -114,7 +116,6 @@ namespace BallroomDance.API.Controllers
                 IdUserRole = entity.IdUserRole,
                 Login = entity.Login,
                 Email = entity.Email,
-                Password = entity.Password,
                 Created = entity.Created,
                 Updated = entity.Updated
             };
@@ -152,9 +153,8 @@ namespace BallroomDance.API.Controllers
             entity.IdUserRole = newEntity.IdUserRole;
             entity.Login = newEntity.Login;
             entity.Email = newEntity.Email;
-            entity.Password = newEntity.Password;
-            entity.Created = newEntity.Created;
-            entity.Updated = newEntity.Updated;
+            entity.Password = Security.GetHash($"{entity.Created}{newEntity.Password}{entity.Created}");
+            entity.Updated = DateTime.Now;
 
             rep.Update(entity);
 

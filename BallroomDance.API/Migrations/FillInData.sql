@@ -34,7 +34,7 @@ VALUES
 INSERT INTO [dbo].[DanceGroups]
     ([RussiaTrainerBallroomDanceId]
     ,[Name]
-    ,[DateCreated])
+    ,[Created])
 VALUES
     (1, 'Ансамбль танца \"Русские узоры\"','01.01.1995'),
 	(2, 'Танцевальный коллектив \"Элегия\"','01.01.2000'),
@@ -84,3 +84,20 @@ VALUES
 	(8, NULL, 'Александр', 'Александров', 'Алексеевич', 'Волгоград', '4в', 97), 
 	(8, NULL, 'Татьяна', 'Тарасова', 'Тимуровна', 'Уфа', '1б', 98),
 	(10, NULL, 'Андрей', 'Андреев', 'Анатольевич', 'Красноярск', '5б', 52)
+
+
+INSERT [dbo].[UserRoles] 
+	([Name]) 
+VALUES 
+	(N'admin')
+
+INSERT [dbo].[Users] 
+	([IdUserRole], 
+	[Login], 
+	[Email], 
+	[Password], 
+	[Created], 
+	[Updated]) 
+VALUES 
+	(1, N'Kira', N'Kira@email.com', N'8On8WBVO4/96H1HaMsc2hw7eYlGRLnz2WrqEnuL12R7TCwHLTC2WUXyxf4W9h+8gZY/w0b7hs7Z8NEYL/UnO7g==', CAST(N'2024-03-15T01:52:03.9154364' AS DateTime2), NULL),
+	(1, N'lololo', N'tuturu@mail.com', N'SCVrePTPJpUQK926yVE57Bm95TLApqYJTvTb0gE1sUmsFV62y1FST18LvsTASRwBEJXTVyiZxBAHGsnJsfOcmg==', CAST(N'2024-03-28T23:11:07.3574760' AS DateTime2), CAST(N'2024-03-28T23:11:07.3574760' AS DateTime2))

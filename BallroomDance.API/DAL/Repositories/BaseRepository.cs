@@ -18,6 +18,11 @@ namespace BallroomDance.API.DAL.Repositories
         {
             return _dbSet.Add(entity).Entity;
         }
+        
+        public void AddRange(params TEntity[] entity)
+        {
+            _dbSet.AddRange(entity);
+        }
 
         public void Delete(TEntity entity)
         {

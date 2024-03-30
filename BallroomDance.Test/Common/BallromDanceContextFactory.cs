@@ -15,7 +15,18 @@ namespace BallroomDance.Test.Common
 
             var context = new ApplicationDbContext(options);
             context.Database.EnsureCreated();
-            context.TypeBallroomDance.AddRange(
+
+            var uow = new UnitOfWork(context);
+
+            var repTypeBallroomDance = uow.GetRepository<TypeBallroomDance>();
+            var repRussiaTrainerBallroomDance = uow.GetRepository<RussiaTrainerBallroomDance>();
+            var repDanceGroup = uow.GetRepository<DanceGroup>();
+            var repServerFile = uow.GetRepository<ServerFile>();
+            var repMemberDanceGroup = uow.GetRepository<MemberDanceGroup>();
+            var repUserRole = uow.GetRepository<UserRole>();
+            var repUser = uow.GetRepository<User>();
+
+            repTypeBallroomDance.AddRange(
                 new TypeBallroomDance
                 {
                     Name = "Самба"
@@ -38,7 +49,7 @@ namespace BallroomDance.Test.Common
                 }
             );
 
-            context.RussiaTrainerBallroomDance.AddRange(
+            repRussiaTrainerBallroomDance.AddRange(
                 new RussiaTrainerBallroomDance
                 {
                     TypeBallroomDanceId = 0,
@@ -76,7 +87,7 @@ namespace BallroomDance.Test.Common
                 }
             );
 
-            context.DanceGroup.AddRange(
+            repDanceGroup.AddRange(
                 new DanceGroup
                 {
                     RussiaTrainerBallroomDanceId = 0,
@@ -109,7 +120,7 @@ namespace BallroomDance.Test.Common
                 }
             );
 
-            context.ServerFile.AddRange(
+            repServerFile.AddRange(
                 new ServerFile
                 {
                     Name = "sunset_paradise.png",
@@ -137,7 +148,7 @@ namespace BallroomDance.Test.Common
                 }
             );
 
-            context.MemberDanceGroup.AddRange(
+            repMemberDanceGroup.AddRange(
                 new MemberDanceGroup
                 {
                     DanceGroupId = 0,
@@ -195,7 +206,7 @@ namespace BallroomDance.Test.Common
                 }
             );
 
-            context.UserRole.AddRange(
+            repUserRole.AddRange(
                 new UserRole
                 {
                     Name = "admin"
@@ -206,7 +217,7 @@ namespace BallroomDance.Test.Common
                 }
             );
 
-            context.User.AddRange(
+            repUser.AddRange(
                 new User
                 {
                     IdUserRole = 0,

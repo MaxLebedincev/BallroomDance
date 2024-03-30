@@ -1,6 +1,5 @@
 using BallroomDance.API;
 using BallroomDance.API.DAL;
-using BallroomDance.API.DAL.Interfaces;
 using BallroomDance.API.DAL.Repositories;
 using BallroomDance.API.Domain.Entity;
 using Microsoft.EntityFrameworkCore;

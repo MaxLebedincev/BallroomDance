@@ -15,7 +15,7 @@ namespace BallroomDance.API.DAL
 
         //public DbSet<TypeBallroomDance> TypeBallroomDance { get; set; }
         //public DbSet<RussiaTrainerBallroomDance> RussiaTrainerBallroomDance { get; set; }
-        //public DbSet<DanceGroup> DanceGroup { get; set; }
+        public DbSet<DanceGroup> DanceGroup { get; set; }
         //public DbSet<ServerFile> ServerFile { get; set; }
         //public DbSet<MemberDanceGroup> MemberDanceGroup { get; set; }
         //public DbSet<UserRole> UserRole { get; set; }

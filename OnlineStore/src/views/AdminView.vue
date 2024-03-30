@@ -68,7 +68,7 @@
                         </v-tab>
                         <v-tab
                             value="option-6"
-                            @click="getGenres()"
+                            @click="getTypeBallroomDances()"
                         >
                             <v-icon start>
                                 mdi-bookmark
@@ -145,7 +145,7 @@
                                     <template #text>
                                         <v-table>
                                             <thead>
-                                            <tr style="padding: 0 1rem; display: table; text-align: center">
+                                            <tr style="text-align: center">
                                                 <td width="60%">
                                                     Название
                                                 </td>
@@ -242,19 +242,12 @@
                                     <template #text>
                                         <v-text-field
                                             label="Наименование"
+                                            v-model="newTypeBallroomDance.Name"
                                             hide-details="auto"
                                         ></v-text-field>
-                                        <v-select
-                                            :modelValue="favorites"
-                                            :items="states"
-                                            label="Картинки"
-                                            multiple
-                                            persistent-hint
-                                            hide-details="auto"
-                                        ></v-select>
                                     </template>
                                     <template #actions>
-                                        <v-btn width="170px" variant="outlined" class="card-button" @click="createAlert">
+                                        <v-btn width="170px" variant="outlined" class="card-button" @click="createTypeBallroomDance">
                                             Добавить
                                         </v-btn>
                                     </template>
@@ -275,7 +268,7 @@
                                                 <td width="10%">{{ dateConvert(item.created) }}</td>
                                                 <td width="10%">{{ dateConvert(item.updated)}}</td>
                                                 <td width="20%" class="text-right">
-                                                    <v-btn width="170px" variant="text" @click="usetEditModal=true">
+                                                    <v-btn width="170px" variant="text" @click="currentItem=item; usetEditModal=true">
                                                         Редактировать
                                                     </v-btn>
                                                     <v-dialog
@@ -286,24 +279,24 @@
                                                             <template #text>
                                                                 <v-text-field
                                                                     label="Имя"
-                                                                    v-model="item.login"
+                                                                    v-model="currentItem.login"
                                                                     hide-details="auto"
                                                                 ></v-text-field>
                                                                 <v-text-field
                                                                     label="Пароль"
-                                                                    v-model="item.password"
+                                                                    v-model="currentItem.password"
                                                                     type="password"
                                                                     hide-details="auto"
                                                                 ></v-text-field>
                                                                 <v-text-field
                                                                     label="Email"
-                                                                    v-model="item.email"
+                                                                    v-model="currentItem.email"
                                                                     hide-details="auto"
                                                                     type="email"
                                                                 ></v-text-field>
                                                             </template>
                                                             <template #actions>
-                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="editUser(item)">
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="editUser(currentItem)">
                                                                     Обновить
                                                                 </v-btn>
                                                                 <v-btn width="170px" variant="outlined" class="card-button" @click="usetEditModal = false">
@@ -334,7 +327,7 @@
                                                 <td width="60%">{{ item.name }}</td>
                                                 <td width="20%">{{ dateConvert(item.created) }}</td>
                                                 <td width="20%" class="text-right">
-                                                    <v-btn width="170px" variant="text" @click="danceGroupEditModal = true">
+                                                    <v-btn width="170px" variant="text" @click="currentItem = item; danceGroupEditModal=true">
                                                         Редактировать
                                                     </v-btn>
                                                     <v-dialog
@@ -345,26 +338,22 @@
                                                             <template #text>
                                                                 <v-text-field
                                                                     label="Имя"
-                                                                    v-model="item.Name"
+                                                                    v-model="currentItem.name"
                                                                     hide-details="auto"
                                                                 ></v-text-field>
-                                                                <v-date-picker
-                                                                    label="Дата создания"
-                                                                    v-model="item.Created"
-                                                                    hide-details="auto"
-                                                                ></v-date-picker>
+
                                                             </template>
                                                             <template #actions>
-                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="editDanceGroup(item)">
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="editDanceGroup(currentItem)">
                                                                     Обновить
                                                                 </v-btn>
-                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="danceGroupEditModal = false">
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="danceGroupEditModal=false">
                                                                     Закрыть
                                                                 </v-btn>
                                                             </template>
                                                         </v-card>
                                                     </v-dialog>
-                                                    <v-btn width="170px" variant="text" @click="deleteDanceGroup">
+                                                    <v-btn width="170px" variant="text" @click="deleteDanceGroup(item.id)">
                                                         Удалить
                                                     </v-btn>
                                                 </td>
@@ -380,16 +369,37 @@
                                         <v-table style="text-align: center">
                                             <tbody>
                                             <tr
-                                                v-for="item in genres"
+                                                v-for="item in dance"
                                                 :key="item.id"
                                             >
-                                                <td width="40%">{{ item.name }}</td>
-                                                <td width="40%">{{ item.image ?? '' }}</td>
+                                                <td width="80%">{{ item.name }}</td>
                                                 <td width="20%" class="text-right">
-                                                    <v-btn width="170px" variant="text" @click="createAlert">
+                                                    <v-btn width="170px" variant="text" @click="currentItem=item; typeBallroomDanceEditModal=true">
                                                         Редактировать
                                                     </v-btn>
-                                                    <v-btn width="170px" variant="text" @click="createAlert">
+                                                    <v-dialog
+                                                        :model-value="typeBallroomDanceEditModal"
+                                                        width="auto"
+                                                    >
+                                                        <v-card>
+                                                            <template #text>
+                                                                <v-text-field
+                                                                    label="Имя"
+                                                                    v-model="currentItem.name"
+                                                                    hide-details="auto"
+                                                                ></v-text-field>
+                                                            </template>
+                                                            <template #actions>
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="editTypeBallroomDance(currentItem)">
+                                                                    Обновить
+                                                                </v-btn>
+                                                                <v-btn width="170px" variant="outlined" class="card-button" @click="typeBallroomDanceEditModal=false">
+                                                                    Закрыть
+                                                                </v-btn>
+                                                            </template>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-btn width="170px" variant="text" @click="deleteTypeBallroomDance(item.id)">
                                                         Удалить
                                                     </v-btn>
                                                 </td>
@@ -474,17 +484,16 @@
 
 <script>
 import moment from 'moment';
-import {UseSelectBooks} from "@/hooks/data/get/useSelectBooks";
-import {UseSelectGenres} from "@/hooks/data/get/useSelectGenres";
 import {UserCreate, UserDelete, UserEdit, UserGet} from "@/hooks/endpoint/user";
 import {DanceGroupCreate, DanceGroupDelete, DanceGroupEdit, DanceGroupGet} from "@/hooks/endpoint/danceGroup";
+import {TypeBallroomDanceCreate, TypeBallroomDanceDelete, TypeBallroomDanceEdit, TypeBallroomDanceGet} from "@/hooks/endpoint/typeBallroomDance";
 
 export default {
     name: "AdminView",
     data: ()=> ({
         tabOpt: 'option-2',
-        favorites: [],
-        books: [],
+
+        dance: [],
         users: [],
         groups: [],
 
@@ -497,6 +506,9 @@ export default {
 
         usetEditModal: false,
         danceGroupEditModal: false,
+        typeBallroomDanceEditModal: false,
+
+        currentItem: null,
 
         newUser: {
             IdUserRole: 1,
@@ -508,25 +520,15 @@ export default {
             RussiaTrainerBallroomDanceId: 1,
             Name: null,
             Created: null
+        },
+        newTypeBallroomDance: {
+            Name: null
         }
     }),
     mounted() {
         this.tabOpt = 'option-2'
     },
     methods: {
-        async getBooks() {
-            let {data, answer} = await UseSelectBooks();
-            if (answer.value) {
-                this.books = data.value;
-            }
-        },
-        async getGenres() {
-            let {data, answer} = await UseSelectGenres();
-            if (answer.value) {
-                this.genres = data.value;
-            }
-        },
-
         async getUsers() {
             let {data, answer} = await UserGet();
             if (answer.value) {
@@ -572,7 +574,7 @@ export default {
         async getDanceGroups() {
             let {data, answer} = await DanceGroupGet();
             if (answer.value) {
-                this.groups = data.value;
+                this.groups = data.value.list;
             }
         },
         async createDanceGroup() {
@@ -607,6 +609,45 @@ export default {
             else {
                 this.createAlertFailed();
             }
+        },
+
+        async getTypeBallroomDances() {
+          let {data, answer} = await TypeBallroomDanceGet();
+          if (answer.value) {
+            this.dance = data.value;
+          }
+        },
+        async createTypeBallroomDance() {
+            let result = await TypeBallroomDanceCreate(this.newTypeBallroomDance.Name);
+            if (result) {
+                this.newTypeBallroomDance = {
+                  Name: null
+                };
+                this.createAlertSuccess();
+            }
+            else {
+                this.createAlertFailed();
+            }
+        },
+        async deleteTypeBallroomDance(id) {
+          let result = await TypeBallroomDanceDelete(id);
+          if (result) {
+            await this.getTypeBallroomDances();
+            this.createAlertDelete();
+          }
+          else {
+            this.createAlertFailed();
+          }
+        },
+        async editTypeBallroomDance(item) {
+          let result = await TypeBallroomDanceEdit(item);
+          if (result) {
+            await this.getTypeBallroomDances();
+            this.createAlertUpdate();
+          }
+          else {
+            this.createAlertFailed();
+          }
         },
 
 

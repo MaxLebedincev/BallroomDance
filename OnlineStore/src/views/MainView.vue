@@ -12,7 +12,7 @@
                         size="56px"
                         prepend-icon="mdi-magnify"
                         variant="tonal"
-                        @click="getData(isPopularity, filterSort, selectTag, page, inputSearch)"
+                        @click="getData(isPopularity, filterSort, page, inputSearch)"
                     ></v-btn>
                     <v-btn
                         class="switch-popularity"
@@ -33,40 +33,38 @@
             </v-col>
         </v-row>
         <v-row class="product">
-            <v-col cols="9" class="container">
+            <v-col cols="12" class="container">
                 <v-container class="content max-width">
-                    <custom-card
-                        v-for="book in books"
-                        :key="book.id"
-                        :modelValue="book"
-                        height="300px"
-                        width="200px"
-                    >
-                    </custom-card>
+                    <v-table>
+                        <thead>
+                            <tr style="text-align: center">
+                                <td width="60%">
+                                    Название
+                                </td>
+                                <td width="40%">
+                                    Дата создания
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="item in groups"
+                                :key="item.id"
+                                style="text-align: center"
+                            >
+                                <td width="60%">{{ item.name }}</td>
+                                <td width="40%">{{ dateConvert(item.created) }}</td>
+                            </tr>
+                        </tbody>
+                    </v-table>
                 </v-container>
                 <div class="container-pagination">
                     <v-pagination
                         class="pagination"
                         v-model="page"
                         :length="countPage"
-                        :update="getData(isPopularity, filterSort, selectTag, page, inputSearch)"
+                        :update="getData(isPopularity, filterSort, page, inputSearch)"
                     ></v-pagination>
-                </div>
-            </v-col>
-            <v-col cols="3" class="filter">
-                <div class="box-color">
-                    <div
-                        class="filter-card"
-                    >
-                        <v-checkbox
-                            class="filter-card__elem"
-                            v-for="(tag, index) in tags"
-                            :key="index"
-                            v-model="selectTag"
-                            :label="tag.name"
-                            :value="tag.id"
-                        ></v-checkbox>
-                    </div>
                 </div>
             </v-col>
         </v-row>
@@ -74,13 +72,11 @@
 </template>
 
 <script>
-import CustomCard from "@/components/CustomCard";
-import {UseGetBooks} from "@/hooks/data/get/useGetBooks";
-import {UseGetGenres} from "@/hooks/data/get/useGetGenres";
+import {DanceGroupGet} from "@/hooks/endpoint/danceGroup";
+import moment from "moment";
 
 export default {
     name: "MainView",
-    components: {CustomCard},
     data: ()=> ({
         inputSearch: '',
         isPopularity: true,
@@ -90,12 +86,11 @@ export default {
         filterOptions: ['дате добавления', 'рейтингу'],
         selectTag: [],
         tags: null,
-        books: [],
+        groups: [],
         text: 'isi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     }),
     mounted() {
-        this.getGenres();
-        this.getData(false, false, [], 1, '')
+        this.getData(false, false, 1, '')
     },
     methods: {
         getIcon(value) {
@@ -104,7 +99,10 @@ export default {
         setPopularity() {
             this.isPopularity = !this.isPopularity;
         },
-        async getData(upParm, filterSelect, filterCheckboxs, pageNumber, name) {
+        dateConvert(date) {
+            return (date) ? moment(date).format("YYYY-MM-DD") : '-';
+        },
+        async getData(upParm, filterSelect, pageNumber, name) {
 
             if (filterSelect === 'рейтингу') {
                 filterSelect = true
@@ -112,11 +110,21 @@ export default {
                 filterSelect = false
             }
 
-            let {data, answer} = await UseGetBooks(upParm, filterSelect, filterCheckboxs, pageNumber, name)
+            let request = {
+                Offset: pageNumber,
+                Number: 10,
+                Name: name
+            }
+
+            let {data, answer} = await DanceGroupGet(request)
 
             if (answer.value) {
-                this.books = data.value.books;
-                this.countPage = data.value.countPage;
+
+                console.log(data.value.list);
+                console.log(data.value.count);
+
+                this.groups = data.value.list;
+                this.countPage = data.value.count;
                 if (this.countPage === 0) {
                     this.countPage = 1;
                 }
@@ -124,17 +132,8 @@ export default {
                     this.page = this.countPage;
                 }
             } else {
-                this.books = []
+                this.groups  = []
                 this.countPage = 1
-            }
-        },
-        async getGenres() {
-            let {genres, answer} = await UseGetGenres();
-
-            if (answer.value) {
-                this.tags = genres.value
-            } else {
-                this.tags = []
             }
         }
     }
@@ -165,12 +164,7 @@ export default {
             flex-direction: column;
             justify-content: space-between;
             .content{
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px,auto));
-                grid-row-gap: 10px;
-                &-card{
 
-                }
             }
             .pagination {
                 box-shadow: 0px 1px 4px -1px;

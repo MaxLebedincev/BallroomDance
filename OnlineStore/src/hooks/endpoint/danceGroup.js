@@ -3,12 +3,12 @@ import {ref} from 'vue';
 
 const endpoint = '/DanceGroup';
 
-export async function DanceGroupGet() {
+export async function DanceGroupGet(request = null) {
     const data = ref([])
     const answer = ref(false)
     const fetching = async () => {
         try {
-            const response = await axios.post(`${endpoint}/Get`);
+            const response = await axios.post(`${endpoint}/Get`, request);
             data.value = response.data;
             answer.value = true;
         } catch (e) {

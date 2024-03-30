@@ -83,7 +83,7 @@ export default {
             {
                 id: 1,
                 link: '/',
-                name: 'Товары',
+                name: 'Группы',
                 role: ['admin', 'moderator', 'client', '']
             },
             {

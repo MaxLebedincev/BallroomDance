@@ -41,7 +41,7 @@ namespace BallroomDance.API.Controllers
         }
 
         [HttpPost("Get")]
-        public async Task<ActionResult<List<TypeBallroomDanceResponse>>> Get([FromBody] TypeBallroomDanceDTO request)
+        public async Task<ActionResult<List<TypeBallroomDanceResponse>>> Get([FromBody] TypeBallroomDanceDTO? request)
         {
             var rep = _unitOfWork.GetRepository<TypeBallroomDance>();
 
@@ -49,13 +49,22 @@ namespace BallroomDance.API.Controllers
 
             list = list.OrderBy(e => e.Id);
 
-            if (!string.IsNullOrEmpty(request.Name))
-                list = list
-                    .Where(e => EF.Functions.Like(e.Name, $"%{request.Name}%"));
+            if (request is not null)
+            {
+                if (!string.IsNullOrEmpty(request.Name))
+                    list = list
+                        .Where(e => EF.Functions.Like(e.Name, $"%{request.Name}%"));
 
-            list = list
-                    .Skip(request.Offset)
-                    .Take(request.Number);
+                list = list
+                        .Skip(request.Offset)
+                        .Take(request.Number);
+            }
+            else
+            {
+                list = list
+                        .Skip(request.Offset)
+                        .Take(request.Number);
+            }
 
             var paginatedList = await list.ToListAsync();
 

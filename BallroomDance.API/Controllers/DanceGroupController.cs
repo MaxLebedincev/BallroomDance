@@ -48,6 +48,8 @@ namespace BallroomDance.API.Controllers
 
             list = list.OrderBy(e => e.Id);
 
+            int count = 1;
+
             if (request is not null)
             {
                 if (!string.IsNullOrEmpty(request.Name))
@@ -59,9 +61,13 @@ namespace BallroomDance.API.Controllers
                 if (!string.IsNullOrEmpty(request.Finish))
                     list = list.Where(e => e.Created <= DateTime.Parse(request.Finish));
 
+                count = list.Count();
+
                 list = list
-                        .Skip(request.Offset)
+                        .Skip((request.Offset-1)* request.Number)
                         .Take(request.Number);
+                    
+                count = (count % request.Number != 0) ? (count / request.Number) + 1 : (count / request.Number);
             }
             else
             {
@@ -83,7 +89,10 @@ namespace BallroomDance.API.Controllers
                     Created = item.Created,
                 });
 
-            return resopnse;
+            return new JsonResult(new { 
+                list = resopnse, 
+                count = count
+            });
         }
 
         [HttpGet("Get/{id:int}")]

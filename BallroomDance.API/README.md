@@ -4,9 +4,9 @@
 
 > [!NOTE]
 > Проект работает на:
-> net8.0
-> Entity Framework
-> SQL Server (MS SQL)
+> net8.0 <br />
+> Entity Framework <br />
+> SQL Server (MS SQL) <br />
 
 Включает в себя:
 
@@ -33,6 +33,6 @@
 - Scheme_DataBase - схема БД
 
 > [!TIP]
-> Проект использует паттерны:
-> [Unit of Work](https://bool.dev/blog/detail/unit-of-work-patterny-obektno-relyatsionnoy-logiki-poeaa)
-> [Repository](https://bool.dev/blog/detail/pattern-repozitoriy-poeaa)
+> Проект использует паттерны: <br />
+> [Unit of Work](https://bool.dev/blog/detail/unit-of-work-patterny-obektno-relyatsionnoy-logiki-poeaa) <br />
+> [Repository](https://bool.dev/blog/detail/pattern-repozitoriy-poeaa) <br />

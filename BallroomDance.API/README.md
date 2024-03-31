@@ -2,6 +2,12 @@
 
 > Бальные танцы интерфейс серверной части
 
+> [!NOTE]
+> Проект работает на:
+> net8.0
+> Entity Framework
+> SQL Server (MS SQL)
+
 Включает в себя:
 
 - Controllers - точки входа
@@ -25,3 +31,8 @@
 	- Security - безопасности
 - appsettings 	  - конфигурация приложения
 - Scheme_DataBase - схема БД
+
+> [!TIP]
+> Проект использует паттерны:
+> [Unit of Work](https://bool.dev/blog/detail/unit-of-work-patterny-obektno-relyatsionnoy-logiki-poeaa)
+> [Repository](https://bool.dev/blog/detail/pattern-repozitoriy-poeaa)

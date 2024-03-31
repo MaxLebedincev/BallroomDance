@@ -19,7 +19,7 @@
 2. Создать базу данных из бэкапа по пути.
 
 ```
-BallroomDance.API/Migrations/databaseMS.bacpac
+BallroomDance.API\Migrations\databaseMS.bacpac
 ```
 
 3. Провести инсталляцию компонентов для клиентской части по пути
@@ -43,7 +43,7 @@ npm run serve
 6. Заполнить данные appsettings.json по пути
 
 ```
-BallroomDance.API/appsettings.json
+BallroomDance.API\appsettings.json
 ```
 
 7. Запустить серверную часть (проект BallroomDance.API)
